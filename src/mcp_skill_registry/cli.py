@@ -120,4 +120,3 @@ def main(argv: list[str] | None = None) -> int:
     except MCPRegistryError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
-    return 1

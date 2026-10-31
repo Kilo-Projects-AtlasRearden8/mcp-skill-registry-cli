@@ -10,46 +10,53 @@ Built and maintained by Asdale Dynamics, LLC (dylanasdale.github.io) — beginne
 
 ```
 pyproject.toml          # package config + console script entry point
-README.md               # usage guide, credits Asdale Dynamics, LLC
+README.md               # beginner-friendly usage guide, credits Asdale Dynamics, LLC
 LICENSE                 # MIT, Copyright (c) 2026 Asdale Dynamics, LLC
 STATUS.md               # this file
+catalog.example.json    # empty starter catalog
+schema/catalog.schema.json  # catalog JSON schema (human-readable copy)
+skills/echo_skill.json        # example MCP skill
 src/mcp_skill_registry/ # package
-  __init__.py
-  __main__.py           # python -m mcp_skill_registry
+  __init__.py           # __version__
+  __main__.py           # python3 -m mcp_skill_registry
   cli.py                # argparse CLI: register, list, test, validate
   catalog.py            # Catalog dataclass, JSON load/save
   registry.py           # Registry: add/list/get/remove/validate skills
   schema.py             # small JSON Schema subset validator
   tester.py             # run a skill command locally, capture output
   errors.py             # exception hierarchy
-schema/catalog.schema.json  # catalog JSON schema (human-readable copy)
-skills/echo_skill.json        # example MCP skill
-catalog.example.json          # empty example catalog
 tests/test_registry.py        # 17 registry/schema/tester tests
 ```
 
 ## How to run it
 
+You need Python 3.9 or newer.
+
 ```bash
-pip install -e .          # or: python3 -m mcp_skill_registry --help (no install needed)
+pip install -e .          # installs the mcp-skill-registry command
 
 mcp-skill-registry register --catalog catalog.json --skill skills/echo_skill.json
 mcp-skill-registry list --catalog catalog.json
 mcp-skill-registry test --catalog catalog.json --id echo-skill --timeout 10
 mcp-skill-registry validate --catalog catalog.json
 
-python3 -m unittest discover -s tests
+python3 -m unittest discover -s tests   # run the test suite
 ```
+
+No install needed alternative: `python3 -m mcp_skill_registry --help`
 
 ## Verification results
 
 - `pip install -e .` — success
 - `python3 -m unittest discover -s tests` — 17 tests, OK (registry add/list/get/remove, duplicate rejection, schema validation, catalog roundtrip, skill tester pass/fail/not-found/timeout)
-- CLI end-to-end — register, list, validate, and test all succeed against `skills/echo_skill.json`; test reports PASS with echoed JSON-RPC response
+- `python3 -m mcp_skill_registry --help` — works
+- CLI end-to-end — register, list, validate, and test all succeed against `skills/echo_skill.json`; test reports PASS with echoed JSON-RPC response (exit 0)
+- LICENSE line 3 — exactly `Copyright (c) 2026 Asdale Dynamics, LLC`
+- README credits Asdale Dynamics, LLC; uses `python3` consistently
 
 ## Known gaps
 
-- Example skill hardcodes `python3`; adjust `command` to match your system if `python` is preferred.
+- Example skill uses `python3`; on systems where only `python` is available, update `command` in skill files.
 - Tester sends an MCP `initialize` JSON-RPC message by default and checks exit code/output; it does not implement full MCP session negotiation.
 - Schema validator covers a subset of JSON Schema (type, required, properties, additionalProperties, items, minLength, minItems, enum, minimum), sufficient for this catalog.
 - Tests use stdlib `unittest`; no pytest dependency.

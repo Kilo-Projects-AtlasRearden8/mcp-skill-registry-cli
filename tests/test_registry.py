@@ -14,7 +14,7 @@ VALID_SKILL = {
     "name": "Echo Skill",
     "description": "An example skill.",
     "version": "0.1.0",
-    "command": ["python"],
+    "command": ["python3"],
     "args": ["-c", "print('hi')"],
     "capabilities": ["echo"],
     "tags": ["example"],
