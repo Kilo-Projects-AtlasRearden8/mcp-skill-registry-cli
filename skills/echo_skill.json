@@ -1,0 +1,13 @@
+{
+  "id": "echo-skill",
+  "name": "Echo Skill",
+  "description": "Example MCP skill that reads a JSON-RPC message and echoes it back.",
+  "version": "0.1.0",
+  "command": ["python3"],
+  "args": [
+    "-c",
+    "import sys,json;msg=sys.stdin.readline();print(json.dumps({\"jsonrpc\":\"2.0\",\"id\":1,\"result\":{\"echo\":msg.strip()}}))"
+  ],
+  "capabilities": ["echo"],
+  "tags": ["example"]
+}

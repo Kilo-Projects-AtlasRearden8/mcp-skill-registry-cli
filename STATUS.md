@@ -1,0 +1,56 @@
+# STATUS
+
+## What was built
+
+`mcp-skill-registry` — a local-first Python CLI (v0.1.0) to register, list, and test MCP agent skills using a JSON catalog with schema validation. No API keys, no accounts, no network required; nothing leaves your machine.
+
+Built and maintained by Asdale Dynamics, LLC (dylanasdale.github.io) — beginner-friendly AI education, books, and practical local-first tools.
+
+## Project layout
+
+```
+pyproject.toml          # package config + console script entry point
+README.md               # usage guide, credits Asdale Dynamics, LLC
+LICENSE                 # MIT, Copyright (c) 2026 Asdale Dynamics, LLC
+STATUS.md               # this file
+src/mcp_skill_registry/ # package
+  __init__.py
+  __main__.py           # python -m mcp_skill_registry
+  cli.py                # argparse CLI: register, list, test, validate
+  catalog.py            # Catalog dataclass, JSON load/save
+  registry.py           # Registry: add/list/get/remove/validate skills
+  schema.py             # small JSON Schema subset validator
+  tester.py             # run a skill command locally, capture output
+  errors.py             # exception hierarchy
+schema/catalog.schema.json  # catalog JSON schema (human-readable copy)
+skills/echo_skill.json        # example MCP skill
+catalog.example.json          # empty example catalog
+tests/test_registry.py        # 17 registry/schema/tester tests
+```
+
+## How to run it
+
+```bash
+pip install -e .          # or: python3 -m mcp_skill_registry --help (no install needed)
+
+mcp-skill-registry register --catalog catalog.json --skill skills/echo_skill.json
+mcp-skill-registry list --catalog catalog.json
+mcp-skill-registry test --catalog catalog.json --id echo-skill --timeout 10
+mcp-skill-registry validate --catalog catalog.json
+
+python3 -m unittest discover -s tests
+```
+
+## Verification results
+
+- `pip install -e .` — success
+- `python3 -m unittest discover -s tests` — 17 tests, OK (registry add/list/get/remove, duplicate rejection, schema validation, catalog roundtrip, skill tester pass/fail/not-found/timeout)
+- CLI end-to-end — register, list, validate, and test all succeed against `skills/echo_skill.json`; test reports PASS with echoed JSON-RPC response
+
+## Known gaps
+
+- Example skill hardcodes `python3`; adjust `command` to match your system if `python` is preferred.
+- Tester sends an MCP `initialize` JSON-RPC message by default and checks exit code/output; it does not implement full MCP session negotiation.
+- Schema validator covers a subset of JSON Schema (type, required, properties, additionalProperties, items, minLength, minItems, enum, minimum), sufficient for this catalog.
+- Tests use stdlib `unittest`; no pytest dependency.
+- Not published to PyPI (intentional, local-first).

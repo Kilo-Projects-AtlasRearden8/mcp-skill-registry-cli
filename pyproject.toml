@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-skill-registry"
+version = "0.1.0"
+description = "Local-first CLI to register, list, and test MCP agent skills with a JSON catalog and schema validation."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{name = "Asdale Dynamics, LLC"}]
+license = {text = "MIT"}
+keywords = ["mcp", "agent", "skill", "registry", "cli", "local-first"]
+
+[project.scripts]
+mcp-skill-registry = "mcp_skill_registry.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
